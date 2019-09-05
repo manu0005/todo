@@ -1,0 +1,21 @@
+<app-todo-list></app-todo-list>
+
+<hr/>
+<form (ngSubmit)="append(lab.value); lab.value=''">
+  <input #lab />
+</form>
+
+<section *ngIf="todoListObs | async as todoList">
+  <ul>
+  <li *ngFor="let item of todoList.items">
+    <input type="checkbox" [ngModel]="item.isDone" (ngModelChange)="updateIsDone(item, $event)" />
+    <form (ngSubmit)="updateLabel(item, lab.value)">
+      <input name="label" [ngModel]="item.label" #lab/>
+    </form>
+    <button (click)="remove(item)">X</button>
+  </li>
+  </ul>
+
+  <hr/>
+  {{todoList | json}}
+</section>

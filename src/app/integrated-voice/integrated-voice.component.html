@@ -1,0 +1,4 @@
+<div>
+  <img *ngIf="isPlaying" src="assets/play.png" height="32"/>
+  <input *ngIf="!isPlaying" (click)="play()" type="submit" value="Jouer">
+</div>

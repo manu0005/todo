@@ -1,0 +1,49 @@
+<section class="todoapp" *ngIf="todolistObs | async as todolist">
+  <header class="header">
+    <h1>{{todolist.label}}</h1>
+    <app-recognition-voice (event)="lab.value = $event"></app-recognition-voice>
+    <form (ngSubmit)="append(lab.value); lab.value=''">
+      <input #lab
+              name        = "newTodoInput"
+              class       = "new-todo"
+              placeholder = "Que faire?"
+              autofocus />
+    </form>
+  </header>
+  <section class="main" *ngIf="!todolist.items.isEmpty()">
+    <input
+           class="toggle-all"
+            type="checkbox"
+            name="toggleAll"
+            id="toggleAll"
+            [ngModel]="allIsChecked"
+            (ngModelChange)="toggleAllItems()"
+    />
+    <label for="toggleAll">Mark all as completed</label>
+
+    <ul class="todo-list">
+      <li *ngFor="let item of todolist.items"
+          [class.completed]="item.isDone"
+          [class.editing]="compItem.isEditing">
+        <app-todo-item [hidden]="!filter(item)" [item]="item" #compItem></app-todo-item>
+        <app-integrated-voice [text]="item.label"></app-integrated-voice>
+      </li>
+    </ul>
+  </section>
+  <footer class="footer">
+    <span class="todo-count"><strong>{{nbItemsRemaining}}</strong> restante{{nbItemsRemaining ? 's' : ''}}</span>
+    <ul class="filters">
+      <li>
+        <a class="filterAll" [class.selected]="isFilterAll" (click)="filterAll()">Tous</a>
+      </li>
+      <li>
+        <a class="filterActives" [class.selected]="isFilterUndone" (click)="filterUndone()">Actifs</a>
+      </li>
+      <li>
+        <a class="filterCompleted" [class.selected]="isFilterDone" (click)="filterDone()">Complétés</a>
+      </li>
+    </ul>
+    <button class="clear-completed" *ngIf="displayDelete" (click)="deleteItemsDone()">Supprimer cochées</button>
+  </footer>
+</section>
+
